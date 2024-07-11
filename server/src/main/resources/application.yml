@@ -14,7 +14,7 @@ spring:
     url: jdbc:postgresql://localhost:5432/algobattle
     username: postgres
     password: sillicon
-    driver-class-name: org.postgre.Driver
+    driver-class-name: org.postgresql.Driver
  
 logging:
   level:
