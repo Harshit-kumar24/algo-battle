@@ -1,0 +1,22 @@
+server:
+  port: 8081
+
+spring:
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        ddl-auto: update
+
+  datasource: 
+    url: jdbc:postgresql://localhost:5432/algobattle
+    username: postgres
+    password: sillicon
+    driver-class-name: org.postgre.Driver
+ 
+logging:
+  level:
+    root: DEBUG
+       
