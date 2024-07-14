@@ -4,8 +4,8 @@ import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.algoBattle.server.entity.User;
+import com.algoBattle.server.entity.ContestRank;
 
-public interface UserRepository extends JpaRepository<User, UUID>{
+public interface ContestRankRepository extends JpaRepository<ContestRank, UUID> {
 
 }

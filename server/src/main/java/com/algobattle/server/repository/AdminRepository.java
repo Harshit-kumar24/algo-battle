@@ -4,8 +4,8 @@ import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.algoBattle.server.entity.User;
+import com.algoBattle.server.entity.Admin;
 
-public interface UserRepository extends JpaRepository<User, UUID>{
+public interface AdminRepository extends JpaRepository<Admin, UUID> {
 
 }
