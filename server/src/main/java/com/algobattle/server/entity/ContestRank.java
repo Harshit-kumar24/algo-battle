@@ -8,6 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -25,10 +26,11 @@ public class ContestRank {
 	@GeneratedValue(strategy = GenerationType.UUID)
 	@Column(name = "contest_rank_id")
 	private UUID contestRankId;
-
-//	@JoinColumn(name = "contest_id")
-//	private Contest contest;
 	
+	@ManyToOne
+	@JoinColumn(name = "contest_id") 
+	private Contest rankContest;
+	 
 	@OneToOne
 	@JoinColumn(name = "user_id")
 	private User user;

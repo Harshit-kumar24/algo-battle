@@ -1,9 +1,7 @@
 package com.algoBattle.server.entity;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -55,8 +53,11 @@ public class Contest {
 	@JsonFormat(pattern = "dd-MM-yyyy HH:mm")
 	@Column(name = "created_at")
 	private LocalDateTime createdAt;
-
+ 
 	@OneToMany(mappedBy = "contest", cascade = CascadeType.ALL)
 	private List<Problem> problems;
+	
+	@OneToMany(mappedBy = "rankContest",cascade = CascadeType.ALL)
+	private List<ContestRank> contestRank;
 
 }
