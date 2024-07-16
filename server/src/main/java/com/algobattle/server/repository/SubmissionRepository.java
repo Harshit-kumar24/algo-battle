@@ -1,10 +1,9 @@
-package com.algoBattle.server.repository;
+package com.algobattle.server.repository;
 
-import java.util.UUID;
-
+import com.algobattle.server.entity.Submission;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.algoBattle.server.entity.Submission;
+import java.util.UUID;
 
 public interface SubmissionRepository extends JpaRepository<Submission, UUID> {
 

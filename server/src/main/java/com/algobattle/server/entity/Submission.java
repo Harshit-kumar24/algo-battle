@@ -1,25 +1,14 @@
-package com.algoBattle.server.entity;
-
-import java.time.LocalDateTime;
-import java.util.UUID;
-
-import org.hibernate.annotations.CreationTimestamp;
+package com.algobattle.server.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -28,38 +17,38 @@ import lombok.NoArgsConstructor;
 @Table(name = "submission", schema = "public")
 public class Submission {
 
-	public enum Status {
-		QU, AC, WA, CE, RE, TL, ML, SE, RF, CJ, PE
-	}
+    public enum Status {
+        QU, AC, WA, CE, RE, TL, ML, SE, RF, CJ, PE
+    }
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.UUID)
-	@Column(name = "submission_id")
-	private UUID submissionId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "submission_id")
+    private UUID submissionId;
 
-	@ManyToOne
-	@JoinColumn(name = "problem_id")
-	private Problem problem;
+    @ManyToOne
+    @JoinColumn(name = "problem_id")
+    private Problem problem;
 
-	@ManyToOne
-	@JoinColumn(name = "user_id")
-	private User user;
-	
-	@CreationTimestamp
-	@JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
-	@Column(name = "created_time")
-	private LocalDateTime createdTime;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
-	@Column(name = "status")
-	private Status status;
+    @CreationTimestamp
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
+    @Column(name = "created_time")
+    private LocalDateTime createdTime;
 
-	@Column(name = "memory")
-	private Long memory;
+    @Column(name = "status")
+    private Status status;
 
-	@Column(name = "time")
-	private Double time;
+    @Column(name = "memory")
+    private Long memory;
 
-	@OneToOne(mappedBy = "submission", cascade = CascadeType.ALL)
-	private TestSubmission testSubmission;
+    @Column(name = "time")
+    private Double time;
+
+    @OneToOne(mappedBy = "submission", cascade = CascadeType.ALL)
+    private TestSubmission testSubmission;
 
 }

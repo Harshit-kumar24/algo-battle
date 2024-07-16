@@ -1,20 +1,12 @@
-package com.algoBattle.server.entity;
+package com.algobattle.server.entity;
 
-import java.util.List;
-import java.util.UUID;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -23,35 +15,35 @@ import lombok.NoArgsConstructor;
 @Table(name = "user", schema = "public")
 public class User {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.UUID)
-	@Column(name = "user_id")
-	private UUID userId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "user_id")
+    private UUID userId;
 
-	@Column(name = "name")
-	private String name;
+    @Column(name = "name")
+    private String name;
 
-	@Column(name = "username")
-	private String username;
+    @Column(name = "username")
+    private String username;
 
-	@Column(name = "password")
-	private String password;
+    @Column(name = "password")
+    private String password;
 
-	@Column(name = "email")
-	private String email;
+    @Column(name = "email")
+    private String email;
 
-	@Column(name = "rating")
-	private Long rating;
+    @Column(name = "rating")
+    private Long rating;
 
-	@Column(name = "total_submissions")
-	private Long totalSubmissions;
+    @Column(name = "total_submissions")
+    private Long totalSubmissions;
 
-	@Column(name = "total_accepted")
-	private Long totalAccepted;
+    @Column(name = "total_accepted")
+    private Long totalAccepted;
 
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-	private List<Submission> submission;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Submission> submission;
 
-	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-	private ContestRank contestRank;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private ContestRank contestRank;
 }

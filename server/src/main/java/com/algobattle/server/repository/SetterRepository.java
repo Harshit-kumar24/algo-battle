@@ -1,10 +1,9 @@
-package com.algoBattle.server.repository;
+package com.algobattle.server.repository;
 
-import java.util.UUID;
-
+import com.algobattle.server.entity.Setter;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.algoBattle.server.entity.Setter;
+import java.util.UUID;
 
 public interface SetterRepository extends JpaRepository<Setter, UUID> {
 

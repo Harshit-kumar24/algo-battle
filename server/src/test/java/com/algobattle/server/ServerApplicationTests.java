@@ -1,4 +1,4 @@
-package com.algoBattle.server;
+package com.algobattle.server;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
