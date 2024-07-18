@@ -1,16 +1,18 @@
 
 server:
-  port: 8081
+  port: ${PORT}
 
 spring:
+  config:
+    import: env.properties
   application:
     name: server
   datasource:
     dbcp2:
       driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/algobattle
-    username: postgres
-    password: sillicon
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
   jpa:
     properties:
       hibernate:
