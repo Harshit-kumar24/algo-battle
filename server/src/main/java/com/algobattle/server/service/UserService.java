@@ -1,6 +1,7 @@
 package com.algobattle.server.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import com.algobattle.server.entity.Submission;
@@ -10,9 +11,9 @@ public interface UserService {
 	
 		void registerUser(User user);
 
-		User loginUser(String username,String password);
+		Optional<User> loginUser(String username,String password);
 		
-		User getUser(UUID userId);
+		Optional<User> getUser(UUID userId);
 		
 		void participateInLiveContest(Long contestId,UUID userId);
 		

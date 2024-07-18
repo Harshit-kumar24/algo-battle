@@ -27,12 +27,10 @@ public class UserServiceImpl implements UserService{
 	}
 	
 	@Override
-	public void registerUser(User user) {
-
-		String userEmail = user.getEmail();
-		String username = user.getUsername();
-		
+	public void registerUser(User user) {	
 		try {
+			String userEmail = user.getEmail();
+			String username = user.getUsername();
 			Optional<User> foundUser = userRepository.findByUserEmail(userEmail);
 
 			if(foundUser.isEmpty()) foundUser = userRepository.findByUsername(username);
@@ -43,24 +41,44 @@ public class UserServiceImpl implements UserService{
 			}
 			else {
 				log.info("email already in use",userEmail);
-				throw new RuntimeErrorException(null, "user already exists!");
+				throw new RuntimeException(username+" user already exists!");
 			}
 		}
 		catch(Exception e) {
-			log.info("user registration failed",e.getMessage());
+			log.error("user registration failed",e.getMessage());
 			throw e;
 		}
 	}
 
 	@Override
-	public User loginUser(String username, String password) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public Optional<User> loginUser(String username, String password) {
+			try {
+				Optional<User> foundUser = userRepository.findByUsername(username);
+				if(foundUser.isPresent()) {
+					String foundUserPassword = foundUser.get().getPassword();
+					if(password.equals(foundUserPassword)) {
+						return foundUser;
+					}
+					else {
+						log.info("Wrong password for the user {}",username);
+					}
+				}
+				else {
+					log.info("User with username {} doesn't exists");
+					throw new RuntimeException("user with username "+username+" doesn't exists");
+				}
+			}
+			catch(Exception e) {
+				log.error("Error logging in for user {}: {}",username,e.getMessage());
+				throw e;
+			}
+		return Optional.empty(); 
+		}
+
 
 	@Override
 	public User getUser(UUID userId) {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
