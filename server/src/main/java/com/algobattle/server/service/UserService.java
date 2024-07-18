@@ -23,7 +23,7 @@ public interface UserService {
 		
 		List<User> getWorldRank();
 		
-		List<Submission> getAllUserSubmission();
+		List<Submission> getAllUserSubmission(UUID userId);
 		
 		List<Submission> getSubmissionForProblem(UUID problemId,UUID userId);
 }
