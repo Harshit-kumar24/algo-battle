@@ -216,7 +216,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<Submission> getSubmissionForProblem(UUID problemId, UUID userId) {
 		try {
-			list<Submission> userSubmissions = submissionRepository.getSubmissionForUser(problemId, userId);
+			List<Submission> userSubmissions = submissionRepository.getSubmissionForUser(problemId, userId);
 		} catch (Exception e) {
 			log.error("Error getting submissions for problem: {}", problemId, e.getMessage());
 			throw e;
