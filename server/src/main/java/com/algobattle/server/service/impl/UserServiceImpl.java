@@ -36,11 +36,11 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private SubmissionRepository submissionRepository;
-	
+
 	@Autowired
 	private ProblemRepository problemRepository;
 
-	//done
+	// done
 	@Override
 	public void registerUser(User user) {
 		try {
@@ -64,7 +64,7 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
-	//done
+	// done
 	@Override
 	public Optional<User> loginUser(String username, String password) {
 		try {
@@ -87,7 +87,7 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
-	//done
+	// done
 	@Override
 	public Optional<User> getUser(UUID userId) {
 		try {
@@ -113,7 +113,7 @@ public class UserServiceImpl implements UserService {
 			Optional<Contest> contest = contestRepository.findById(contestId);
 			if (contest.get().getHidden().equals(false)) {
 				List<Problem> problems = contest.get().getProblems();
-				Integer score = 0;
+				Long score = 0L;
 				for (Problem problem : problems) {
 					// will return how much score you got from some problem
 					UUID problemId = problem.getProblemId();
@@ -123,7 +123,7 @@ public class UserServiceImpl implements UserService {
 				log.info("Final score obtained after contest is {} for user {}", score, userId);
 			} else {
 				// just solve problems of the contest
-				Integer score = 0;
+				Long score = 0L;
 				if (contest.isPresent()) {
 					List<Problem> problems = contest.get().getProblems();
 					for (Problem problem : problems) {
@@ -139,25 +139,28 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public Boolean solveProblem(UUID problemId, UUID userId) {
+	public Boolean solveProblemByUser(UUID problemId, UUID userId) {
 		try {
 			Optional<Problem> foundProblem = problemRepository.findById(problemId);
-			if(foundProblem.isPresent()) {
-				Integer score =0;
-				 score = solveProblem(problemId,userId);
-				if(score>0) {
-					log.info("Problem {} solved sucessfully by user: {}",problemId,userId);
+			if (foundProblem.isPresent()) {
+				Long score = 0L;
+				Contest contest = foundProblem.get().getContest();
+				Long contestId = contest.getContestId();
+				score = solveProblem(problemId, userId, contestId);
+				if (score > 0) {
+					log.info("Problem {} solved sucessfully by user: {}", problemId, userId);
+					return true;
+				} else {
+					log.warn("user {} failed to solve problem {}", userId, problemId);
+					return false;
 				}
-				else {
-					log.warn("user {} failed to solve problem {}",userId,problemId );
-				}
+			} else {
+				log.warn("Problem with problem id {} doesn't exists", problemId);
+				return false;
 			}
-			else {
-				log.warn("Problem with problem id {} doesn't exists",problemId);
-			}
-		}
-		catch(Exception e) {
-			log.error("Error getting problem for user: {}",userId,e.getMessage());
+		} catch (Exception e) {
+			log.error("Error getting problem for user: {}", userId, e.getMessage());
+			throw e;
 		}
 	}
 
@@ -168,8 +171,7 @@ public class UserServiceImpl implements UserService {
 			Optional<User> foundUser = userRepository.findById(userId);
 
 			if (foundContest.isPresent() && foundUser.isPresent()) {
-				Long rank = contestRepository.findContestRank(contestId, userId);
-				return rank;
+				return contestRankRepository.findContestRank(contestId, userId);
 			} else {
 				log.warn("Error getting contest rank for user {} with contest id {}", userId, contestId);
 				return 0L;
@@ -198,7 +200,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<Submission> getAllUserSubmission(UUID userId) {
 		try {
-			List<Submission> allSubmission = submissionRepository.findSubmissionForUser(userId);
+			List<Submission> allSubmission = submissionRepository.findSubmissionsForUser(userId);
 			if (allSubmission.isEmpty()) {
 				log.warn("No submissions were made for the user: {}", userId);
 				return allSubmission;
@@ -216,12 +218,52 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<Submission> getSubmissionForProblem(UUID problemId, UUID userId) {
 		try {
-			List<Submission> userSubmissions = submissionRepository.getSubmissionForUser(problemId, userId);
+			List<Submission> userSubmissions = submissionRepository.getSubmissionForUserForProblem(userId, problemId);
+			if (!userSubmissions.isEmpty()) {
+				log.info("logging the user submissions");
+				return userSubmissions;
+			} else {
+				log.warn("No submissions were made for the current problem by the user: {}", userId);
+				return userSubmissions;
+			}
+
 		} catch (Exception e) {
 			log.error("Error getting submissions for problem: {}", problemId, e.getMessage());
 			throw e;
 		}
-		return null;
 	}
 
+	public void updateUserRating(UUID userId, Long score) {
+		try {
+			Optional<User> user = userRepository.findById(userId);
+			User foundUser = user.get();
+			Long currentRating = foundUser.getRating();
+			foundUser.setRating(currentRating + score);
+			userRepository.save(foundUser);
+			log.info("Sucessfully updated score for user: {}", userId);
+		} catch (Exception e) {
+			log.error("Error updating score for user: {}", userId);
+			throw e;
+		}
+	}
+
+	public Long solveProblem(UUID problemId, UUID userId, Long contestId) {
+		try {
+			Boolean submission = resolvedSubmission(problemId, userId, contestId);
+			if (submission.equals(true)) {
+				Optional<Problem> problem = problemRepository.findById(problemId);
+				// if contest is live
+				Optional<Contest> contest = contestRepository.findById(contestId);
+				if (contest.get().getHidden().equals(false)) {
+					log.info("Contest with contestId {} is live", contestId);
+					Long points = problem.get().getPoints();
+					log.info("Sucessfully solved problem");
+					return points;
+				}
+				return 0L;
+			}
+		} catch (Exception e) {
+			log.error("Error submitting code for problem: {}", problemId);
+		}
+	}
 }

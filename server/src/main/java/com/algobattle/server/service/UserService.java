@@ -17,7 +17,7 @@ public interface UserService {
 		
 		void participateInLiveContest(Long contestId,UUID userId);
 		
-		Boolean solveProblem(UUID problemId,UUID userId);
+		Boolean solveProblemByUser(UUID problemId,UUID userId);
 		
 		Long getContestRank(Long contestId,UUID userId);
 		
